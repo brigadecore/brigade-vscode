@@ -11,7 +11,8 @@
         "Other"
     ],
     "activationEvents": [
-        "onCommand:extension.sayHello"
+        "onCommand:extension.sayHello",
+        "onView:brigade.projects"
     ],
     "main": "./out/extension",
     "contributes": {
@@ -20,7 +21,24 @@
                 "command": "extension.sayHello",
                 "title": "Hello World"
             }
-        ]
+        ],
+        "viewsContainers": {
+            "activitybar": [
+                {
+                    "id": "brigadeView",
+                    "title": "Brigade",
+                    "icon": "images/logo.svg"
+                }
+            ]
+        },
+        "views": {
+            "brigadeView": [
+                {
+                    "id": "brigade.projects",
+                    "name": "Projects"
+                }
+            ]
+        }
     },
     "scripts": {
         "vscode:prepublish": "npm run compile",
