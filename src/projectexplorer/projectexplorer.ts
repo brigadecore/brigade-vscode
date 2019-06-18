@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import { ProjectExplorerNode } from './node';
-import { MessageNode } from './messagenode';
+import { ProjectNode } from './projectnode';
 
 export class ProjectExplorer implements vscode.TreeDataProvider<ProjectExplorerNode> {
     onDidChangeTreeData?: vscode.Event<ProjectExplorerNode | null | undefined> | undefined;
@@ -9,7 +9,7 @@ export class ProjectExplorer implements vscode.TreeDataProvider<ProjectExplorerN
         if (element) {
             return element.getChildren();
         }
-        return [new MessageNode('test')];
+        return ProjectNode.all();
     }
 
     getTreeItem(element: ProjectExplorerNode): vscode.TreeItem | Thenable<vscode.TreeItem> {
