@@ -4,6 +4,7 @@ import * as config from '../config/config';
 import { Errorable } from '../utils/errorable';
 import * as shell from '../utils/shell';
 import { ProjectSummary } from './brigade.objectmodel';
+import { parseTable } from './parsers';
 
 const logChannel = vscode.window.createOutputChannel("Duffle");
 
@@ -28,13 +29,11 @@ function andLog<T>(fn: (s: string) => T): (s: string) => T {
 
 export function listProjects(sh: shell.Shell): Promise<Errorable<ProjectSummary[]>> {
     function parse(stdout: string): ProjectSummary[] {
-        // TODO: replace with a table parser
-        const lines = stdout.split('\n');
-        const body = lines.slice(1);
-        return body.map((l) => l.trim())
-            .filter((l) => l.length > 0)
-            .map((l) => l.split('\t'))
-            .map((bits) => ({ name: bits[0].trim(), id: bits[1].trim(), repo: bits[2].trim() }));
+        return parseTable(stdout).map((d) => ({
+            name: d.name,
+            id: d.id,
+            repo: d.repo
+        }));
     }
     return invokeObj(sh, 'project list', '', {}, parse);
 }
