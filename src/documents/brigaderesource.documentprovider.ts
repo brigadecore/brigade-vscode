@@ -3,6 +3,7 @@ import * as vscode from 'vscode';
 import * as brigade from '../brigade/brigade';
 import { shell } from '../utils/shell';
 import { succeeded } from '../utils/errorable';
+import { longRunning } from '../utils/host';
 
 const BRIGADE_RESOURCE_SCHEME = "brig";
 
@@ -33,7 +34,7 @@ export class BrigadeResourceDocumentProvider implements vscode.TextDocumentConte
             case 'project':
                 return projectContent(bits[0]);
             case 'build':
-                    return buildContent(bits[0]);
+                return buildContent(bits[0]);
             default:
                 return null;
         }
@@ -41,7 +42,7 @@ export class BrigadeResourceDocumentProvider implements vscode.TextDocumentConte
 }
 
 async function projectContent(projectId: string): Promise<string | null> {
-    const json = await brigade.getProject(shell, projectId);
+    const json = await longRunning(`Getting project ${projectId}`, brigade.getProject(shell, projectId));
     if (succeeded(json)) {
         return json.result;
     }
@@ -49,7 +50,7 @@ async function projectContent(projectId: string): Promise<string | null> {
 }
 
 async function buildContent(buildId: string): Promise<string | null> {
-    const json = await brigade.getBuild(shell, buildId);
+    const json = await longRunning(`Getting build ${buildId}`, brigade.getBuild(shell, buildId));
     if (succeeded(json)) {
         return json.result;
     }
