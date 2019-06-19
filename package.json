@@ -11,7 +11,7 @@
         "Other"
     ],
     "activationEvents": [
-        "onCommand:extension.sayHello",
+        "onCommand:brigade.get",
         "onView:brigade.projects"
     ],
     "main": "./out/extension",
