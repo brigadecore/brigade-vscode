@@ -12,6 +12,7 @@
     ],
     "activationEvents": [
         "onCommand:brigade.get",
+        "onCommand:brigade.refreshProjectExplorer",
         "onView:brigade.projects"
     ],
     "main": "./out/extension",
@@ -35,6 +36,15 @@
             {
                 "command": "brigade.get",
                 "title": "Get"
+            },
+            {
+                "command": "brigade.refreshProjectExplorer",
+                "title": "Refresh Project Explorer",
+                "category": "Brigade",
+                "icon": {
+                    "light": "images/light/refresh.svg",
+                    "dark": "images/dark/refresh.svg"
+                }
             }
         ],
         "viewsContainers": {
@@ -59,6 +69,13 @@
                 {
                     "command": "brigade.get",
                     "when": ""
+                }
+            ],
+            "view/title": [
+                {
+                    "command": "brigade.refreshProjectExplorer",
+                    "when": "view == brigade.projects",
+                    "group": "navigation"
                 }
             ],
             "view/item/context": [

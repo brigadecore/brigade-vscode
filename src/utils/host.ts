@@ -39,3 +39,7 @@ export async function confirm(text: string, confirmLabel: string): Promise<boole
     const choice = await vscode.window.showWarningMessage(text, confirmLabel, 'Cancel');
     return choice === confirmLabel;
 }
+
+export async function refreshProjectExplorer(): Promise<void> {
+    await vscode.commands.executeCommand("brigade.refreshProjectExplorer");
+}
