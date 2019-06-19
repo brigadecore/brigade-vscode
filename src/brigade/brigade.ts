@@ -3,7 +3,7 @@ import * as vscode from 'vscode';
 import * as config from '../config/config';
 import { Errorable } from '../utils/errorable';
 import * as shell from '../utils/shell';
-import { ProjectSummary } from './brigade.objectmodel';
+import { ProjectSummary, BuildSummary } from './brigade.objectmodel';
 import { parseTable } from './parsers';
 
 const logChannel = vscode.window.createOutputChannel("Duffle");
@@ -40,4 +40,18 @@ export function listProjects(sh: shell.Shell): Promise<Errorable<ProjectSummary[
 
 export function getProject(sh: shell.Shell, projectId: string): Promise<Errorable<string>> {
     return invokeObj(sh, 'project get', projectId, {}, (s) => s);
+}
+
+export function listBuilds(sh: shell.Shell, projectId: string): Promise<Errorable<BuildSummary[]>> {
+    function parse(stdout: string): BuildSummary[] {
+        return parseTable(stdout).map((d) => ({
+            id: d.id,
+            status: d.status
+        }));
+    }
+    return invokeObj(sh, 'build list', projectId, {}, parse);
+}
+
+export function getBuild(sh: shell.Shell, buildId: string): Promise<Errorable<string>> {
+    return invokeObj(sh, 'build get', buildId, {}, (s) => s);
 }

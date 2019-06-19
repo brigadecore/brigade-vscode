@@ -10,6 +10,10 @@ export function projectUri(id: string): vscode.Uri {
     return vscode.Uri.parse(`${BRIGADE_RESOURCE_SCHEME}://project/${id}`);
 }
 
+export function buildUri(id: string): vscode.Uri {
+    return vscode.Uri.parse(`${BRIGADE_RESOURCE_SCHEME}://build/${id}`);
+}
+
 export class BrigadeResourceDocumentProvider implements vscode.TextDocumentContentProvider {
 
     public static scheme() {
@@ -28,6 +32,8 @@ export class BrigadeResourceDocumentProvider implements vscode.TextDocumentConte
         switch (uri.authority) {
             case 'project':
                 return projectContent(bits[0]);
+            case 'build':
+                    return buildContent(bits[0]);
             default:
                 return null;
         }
@@ -36,6 +42,14 @@ export class BrigadeResourceDocumentProvider implements vscode.TextDocumentConte
 
 async function projectContent(projectId: string): Promise<string | null> {
     const json = await brigade.getProject(shell, projectId);
+    if (succeeded(json)) {
+        return json.result;
+    }
+    return null;
+}
+
+async function buildContent(buildId: string): Promise<string | null> {
+    const json = await brigade.getBuild(shell, buildId);
     if (succeeded(json)) {
         return json.result;
     }

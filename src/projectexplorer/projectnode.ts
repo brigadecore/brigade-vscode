@@ -1,11 +1,12 @@
 import * as brigade from '../brigade/brigade';
 import { shell } from '../utils/shell';
 import { ProjectExplorerNodeBase, ProjectExplorerNode } from "./node";
-import { ProviderResult, TreeItem, TreeItemCollapsibleState, Uri } from "vscode";
+import { TreeItem, TreeItemCollapsibleState, Uri } from "vscode";
 import { succeeded } from '../utils/errorable';
 import { MessageNode } from './messagenode';
 import { HasResourceURI } from './node.hasresourceuri';
 import { projectUri } from '../documents/brigaderesource.documentprovider';
+import { BuildNode } from './buildnode';
 
 export interface ProjectExplorerProjectNode extends ProjectExplorerNodeBase, HasResourceURI {
     readonly nodeType: 'project';
@@ -27,11 +28,15 @@ export class ProjectNode implements ProjectExplorerProjectNode {
 
     readonly nodeType = 'project';
     constructor(readonly name: string, readonly id: string, readonly repo: string) {}
-    getChildren(): ProviderResult<ProjectExplorerNode[]> {
-        return [];
+    async getChildren(): Promise<ProjectExplorerNode[]> {
+        const builds = await brigade.listBuilds(shell, this.id);
+        if (succeeded(builds)) {
+            return builds.result.map((b) => new BuildNode(b.id, b.status));
+        }
+        return [new MessageNode('Error listing builds', builds.error[0])];
     }
     getTreeItem(): TreeItem | Thenable<TreeItem> {
-        const treeItem = new TreeItem(this.name, TreeItemCollapsibleState.None);
+        const treeItem = new TreeItem(this.name, TreeItemCollapsibleState.Collapsed);
         treeItem.contextValue = 'gettable';
         return treeItem;
     }
