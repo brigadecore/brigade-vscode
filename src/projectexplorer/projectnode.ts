@@ -1,11 +1,13 @@
 import * as brigade from '../brigade/brigade';
 import { shell } from '../utils/shell';
 import { ProjectExplorerNodeBase, ProjectExplorerNode } from "./node";
-import { ProviderResult, TreeItem, TreeItemCollapsibleState } from "vscode";
+import { ProviderResult, TreeItem, TreeItemCollapsibleState, Uri } from "vscode";
 import { succeeded } from '../utils/errorable';
 import { MessageNode } from './messagenode';
+import { HasResourceURI } from './node.hasresourceuri';
+import { projectUri } from '../documents/brigaderesource.documentprovider';
 
-export interface ProjectExplorerProjectNode extends ProjectExplorerNodeBase {
+export interface ProjectExplorerProjectNode extends ProjectExplorerNodeBase, HasResourceURI {
     readonly nodeType: 'project';
     readonly name: string;
     readonly id: string;
@@ -30,7 +32,12 @@ export class ProjectNode implements ProjectExplorerProjectNode {
     }
     getTreeItem(): TreeItem | Thenable<TreeItem> {
         const treeItem = new TreeItem(this.name, TreeItemCollapsibleState.None);
+        treeItem.contextValue = 'gettable';
         return treeItem;
+    }
+
+    resourceURI(): Uri {
+        return projectUri(this.id);
     }
 
 }

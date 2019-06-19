@@ -33,8 +33,8 @@
         },
         "commands": [
             {
-                "command": "extension.sayHello",
-                "title": "Hello World"
+                "command": "brigade.get",
+                "title": "Get"
             }
         ],
         "viewsContainers": {
@@ -51,6 +51,20 @@
                 {
                     "id": "brigade.projects",
                     "name": "Projects"
+                }
+            ]
+        },
+        "menus": {
+            "commandPalette": [
+                {
+                    "command": "brigade.get",
+                    "when": ""
+                }
+            ],
+            "view/item/context": [
+                {
+                    "command": "brigade.get",
+                    "when": "viewItem =~ /gettable/"
                 }
             ]
         }

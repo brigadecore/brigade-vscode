@@ -37,3 +37,7 @@ export function listProjects(sh: shell.Shell): Promise<Errorable<ProjectSummary[
     }
     return invokeObj(sh, 'project list', '', {}, parse);
 }
+
+export function getProject(sh: shell.Shell, projectId: string): Promise<Errorable<string>> {
+    return invokeObj(sh, 'project get', projectId, {}, (s) => s);
+}
