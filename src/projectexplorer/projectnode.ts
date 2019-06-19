@@ -31,7 +31,7 @@ export class ProjectNode implements ProjectExplorerProjectNode {
     async getChildren(): Promise<ProjectExplorerNode[]> {
         const builds = await brigade.listBuilds(shell, this.id);
         if (succeeded(builds)) {
-            return builds.result.map((b) => new BuildNode(b.id, b.status));
+            return builds.result.map((b) => new BuildNode(b.id, b.status, b.age));
         }
         return [new MessageNode('Error listing builds', builds.error[0])];
     }

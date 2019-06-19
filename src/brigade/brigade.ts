@@ -5,6 +5,7 @@ import { Errorable } from '../utils/errorable';
 import * as shell from '../utils/shell';
 import { ProjectSummary, BuildSummary } from './brigade.objectmodel';
 import { parseTable } from './parsers';
+import { Age } from '../utils/age';
 
 const logChannel = vscode.window.createOutputChannel("Duffle");
 
@@ -46,7 +47,8 @@ export function listBuilds(sh: shell.Shell, projectId: string): Promise<Errorabl
     function parse(stdout: string): BuildSummary[] {
         return parseTable(stdout).map((d) => ({
             id: d.id,
-            status: d.status
+            status: d.status,
+            age: Age.fromKubernetesShort(d.age)
         }));
     }
     return invokeObj(sh, 'build list', projectId, {}, parse);

@@ -1,3 +1,5 @@
+import { Age } from "../utils/age";
+
 export interface ProjectSummary {
     readonly name: string;
     readonly id: string;
@@ -7,4 +9,5 @@ export interface ProjectSummary {
 export interface BuildSummary {
     readonly id: string;
     readonly status: string;
+    readonly age: Age;
 }
