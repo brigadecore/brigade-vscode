@@ -7,6 +7,7 @@ import { MessageNode } from './messagenode';
 import { HasResourceURI } from './node.hasresourceuri';
 import { projectUri } from '../documents/brigaderesource.documentprovider';
 import { BuildNode } from './buildnode';
+import '../utils/array';
 
 export interface ProjectExplorerProjectNode extends ProjectExplorerNodeBase, HasResourceURI {
     readonly nodeType: 'project';
@@ -20,7 +21,9 @@ export class ProjectNode implements ProjectExplorerProjectNode {
     public static async all(): Promise<ProjectExplorerNode[]> {
         const projects = await brigade.listProjects(shell);
         if (succeeded(projects)) {
-            return projects.result.map((p) => new ProjectNode(p.name, p.id, p.repo));
+            return projects.result
+                           .orderBy((p) => p.name)
+                           .map((p) => new ProjectNode(p.name, p.id, p.repo));
         } else {
             return [new MessageNode('Error listing projects', projects.error[0])];
         }
