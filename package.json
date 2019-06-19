@@ -11,16 +11,80 @@
         "Other"
     ],
     "activationEvents": [
-        "onCommand:extension.sayHello"
+        "onCommand:brigade.get",
+        "onCommand:brigade.refreshProjectExplorer",
+        "onView:brigade.projects"
     ],
     "main": "./out/extension",
     "contributes": {
+        "configuration": {
+            "title": "Brigade",
+            "properties": {
+                "brigade": {
+                    "type": "object",
+                    "description": "Brigade configuration",
+                    "properties": {
+                        "brig-path": {
+                            "type": "string",
+                            "description": "File path to a brig binary"
+                        }
+                    }
+                }
+            }
+        },
         "commands": [
             {
-                "command": "extension.sayHello",
-                "title": "Hello World"
+                "command": "brigade.get",
+                "title": "Get"
+            },
+            {
+                "command": "brigade.refreshProjectExplorer",
+                "title": "Refresh Project Explorer",
+                "category": "Brigade",
+                "icon": {
+                    "light": "images/light/refresh.svg",
+                    "dark": "images/dark/refresh.svg"
+                }
             }
-        ]
+        ],
+        "viewsContainers": {
+            "activitybar": [
+                {
+                    "id": "brigadeView",
+                    "title": "Brigade",
+                    "icon": "images/logo.svg"
+                }
+            ]
+        },
+        "views": {
+            "brigadeView": [
+                {
+                    "id": "brigade.projects",
+                    "name": "Projects"
+                }
+            ]
+        },
+        "menus": {
+            "commandPalette": [
+                {
+                    "command": "brigade.get",
+                    "when": ""
+                }
+            ],
+            "view/title": [
+                {
+                    "command": "brigade.refreshProjectExplorer",
+                    "when": "view == brigade.projects",
+                    "group": "navigation"
+                }
+            ],
+            "view/item/context": [
+                {
+                    "command": "brigade.get",
+                    "when": "viewItem =~ /gettable/"
+                }
+            ]
+        }
     },
     "scripts": {
         "vscode:prepublish": "npm run compile",
@@ -35,5 +99,9 @@
         "tslint": "^5.8.0",
         "@types/node": "^8.10.25",
         "@types/mocha": "^2.2.42"
+    },
+    "dependencies": {
+        "@types/shelljs": "^0.8.5",
+        "shelljs": "^0.8.3"
     }
 }
