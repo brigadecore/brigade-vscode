@@ -13,3 +13,7 @@ export function brigPath(): string | undefined {
 export function toolPath(tool: string): string | undefined {
     return vscode.workspace.getConfiguration(EXTENSION_CONFIG_KEY)[`${tool}-path`];
 }
+
+export function getConfiguredNamespace(): string | undefined {
+    return vscode.workspace.getConfiguration(EXTENSION_CONFIG_KEY)['namespace'];
+}
