@@ -6,9 +6,13 @@ import { ProjectExplorerNode } from './projectexplorer/node';
 import { BrigadeResourceDocumentProvider } from './documents/brigaderesource.documentprovider';
 import { hasResourceURI } from './projectexplorer/node.hasresourceuri';
 
+let currentExtensionContext: vscode.ExtensionContext | null = null;
+
 const projectExplorer = new ProjectExplorer();
 
 export function activate(context: vscode.ExtensionContext) {
+    currentExtensionContext = context;
+
     const disposables = [
         // Commands
         vscode.commands.registerCommand("brigade.get", onCommandGet),
@@ -34,4 +38,8 @@ async function onCommandGet(target?: ProjectExplorerNode): Promise<void> {
 
 function onCommandRefreshProjectExplorer() {
     projectExplorer.refresh();
+}
+
+export function extensionContext(): vscode.ExtensionContext {
+    return currentExtensionContext!;
 }

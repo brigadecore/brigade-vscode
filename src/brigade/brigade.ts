@@ -3,7 +3,7 @@ import * as vscode from 'vscode';
 import * as config from '../config/config';
 import { Errorable } from '../utils/errorable';
 import * as shell from '../utils/shell';
-import { ProjectSummary, BuildSummary } from './brigade.objectmodel';
+import { ProjectSummary, BuildSummary, BuildStatus } from './brigade.objectmodel';
 import { parseTable } from './parsers';
 import { Age } from '../utils/age';
 
@@ -47,7 +47,7 @@ export function listBuilds(sh: shell.Shell, projectId: string): Promise<Errorabl
     function parse(stdout: string): BuildSummary[] {
         return parseTable(stdout).map((d) => ({
             id: d.id,
-            status: d.status,
+            status: d.status as BuildStatus,
             age: Age.fromKubernetesShort(d.age)
         }));
     }
