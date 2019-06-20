@@ -12,6 +12,8 @@
     ],
     "activationEvents": [
         "onCommand:brigade.get",
+        "onCommand:brigade.runProject",
+        "onCommand:brigade.rerunBuild",
         "onCommand:brigade.refreshProjectExplorer",
         "onView:brigade.projects"
     ],
@@ -39,7 +41,18 @@
         "commands": [
             {
                 "command": "brigade.get",
-                "title": "Get"
+                "title": "Get",
+                "category": "Brigade"
+            },
+            {
+                "command": "brigade.runProject",
+                "title": "Run",
+                "category": "Brigade"
+            },
+            {
+                "command": "brigade.rerunBuild",
+                "title": "Rerun",
+                "category": "Brigade"
             },
             {
                 "command": "brigade.refreshProjectExplorer",
@@ -85,7 +98,18 @@
             "view/item/context": [
                 {
                     "command": "brigade.get",
-                    "when": "viewItem =~ /gettable/"
+                    "when": "view == brigade.projects && viewItem =~ /gettable/",
+                    "group": "0"
+                },
+                {
+                    "command": "brigade.runProject",
+                    "when": "view == brigade.projects && viewItem =~ /brigade\\.project/",
+                    "group": "1"
+                },
+                {
+                    "command": "brigade.rerunBuild",
+                    "when": "view == brigade.projects && viewItem =~ /brigade\\.build/ && viewItem =~ /rerunnable/",
+                    "group": "1"
                 }
             ]
         }
