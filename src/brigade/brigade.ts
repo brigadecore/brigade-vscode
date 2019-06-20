@@ -7,15 +7,17 @@ import { ProjectSummary, BuildSummary, BuildStatus } from './brigade.objectmodel
 import { parseTable } from './parsers';
 import { Age } from '../utils/age';
 
-const logChannel = vscode.window.createOutputChannel("Duffle");
+const logChannel = vscode.window.createOutputChannel("Brigade");
 
 async function invokeObj<T>(sh: shell.Shell, command: string, args: string, opts: shell.ExecOpts, fn: (stdout: string) => T): Promise<Errorable<T>> {
     const bin = config.brigPath() || 'brig';
-    const cmd = `${bin} ${command} ${args}`;
+    const brigadeNamespace = config.getConfiguredNamespace() || 'default';
+    const nsarg = `--namespace ${brigadeNamespace}`;
+    const cmd = `${bin} ${command} ${args} ${nsarg}`;
     logChannel.appendLine(`$ ${cmd}`);
     return await sh.execObj<T>(
         cmd,
-        `duffle ${command}`,
+        `brig ${command}`,
         opts,
         andLog(fn)
     );

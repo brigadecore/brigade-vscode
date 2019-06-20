@@ -27,6 +27,10 @@
                         "brig-path": {
                             "type": "string",
                             "description": "File path to a brig binary"
+                        },
+                        "namespace": {
+                            "type": "string",
+                            "description": "Namespace where Brigade is configured in your cluster"
                         }
                     }
                 }
