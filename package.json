@@ -41,6 +41,10 @@
                         "open-dashboard": {
                             "type": "boolean",
                             "description": "Open the dashboard in the browser. Default true"
+                        },
+                        "brigadeterm-path": {
+                            "type": "string",
+                            "description": "File path to the brigadeterm binary"
                         }
                     }
                 }
@@ -75,6 +79,11 @@
                 "command": "brigade.openWebDashboard",
                 "category": "Brigade",
                 "title": "Open Web Dashboard"
+            },
+            {
+                "command": "brigade.openCliDashboard",
+                "category": "Brigade",
+                "title": "Open CLI Dashboard (Brigadeterm)"
             }
         ],
         "viewsContainers": {

@@ -98,6 +98,16 @@ export async function openWebDashboard(): Promise<void> {
     terminal.show();
 }
 
+export async function openCliDashboard(): Promise<void> {
+    const bin = config.brigadetermPath() || 'brigadeterm';
+    const brigadeNamespace = config.getConfiguredNamespace() || 'default';
+    const cmd = `${bin} --namespace ${brigadeNamespace}`;
+
+    const terminal = ensureTerminal();
+    terminal.sendText(cmd);
+    terminal.show();
+}
+
 function ensureTerminal(): vscode.Terminal {
     const terminals = vscode.window.terminals;
     for (const term of terminals) {
