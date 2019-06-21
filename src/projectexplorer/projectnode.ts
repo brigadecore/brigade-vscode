@@ -8,6 +8,8 @@ import { HasResourceURI } from './node.hasresourceuri';
 import { projectUri } from '../documents/brigaderesource.documentprovider';
 import { BuildNode } from './buildnode';
 import '../utils/array';
+import { contextOf } from './contextutil';
+import { Age } from '../utils/age';
 
 export interface ProjectExplorerProjectNode extends ProjectExplorerNodeBase, HasResourceURI {
     readonly nodeType: 'project';
@@ -34,13 +36,15 @@ export class ProjectNode implements ProjectExplorerProjectNode {
     async getChildren(): Promise<ProjectExplorerNode[]> {
         const builds = await brigade.listBuilds(shell, this.id);
         if (succeeded(builds)) {
-            return builds.result.map((b) => new BuildNode(b.id, b.status, b.age));
+            return builds.result
+                         .orderBy((b) => Age.sortIndex(b.age))
+                         .map((b) => new BuildNode(b.id, b.status, b.age));
         }
         return [new MessageNode('Error listing builds', builds.error[0])];
     }
     getTreeItem(): TreeItem | Thenable<TreeItem> {
         const treeItem = new TreeItem(this.name, TreeItemCollapsibleState.Collapsed);
-        treeItem.contextValue = 'gettable';
+        treeItem.contextValue = contextOf('brigade.project', 'gettable');
         return treeItem;
     }
 

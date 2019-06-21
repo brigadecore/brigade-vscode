@@ -6,6 +6,7 @@ import { Age } from "../utils/age";
 import { BuildStatus } from "../brigade/brigade.objectmodel";
 import { extensionContext } from "../extension";
 import { cantHappen } from "../utils/never";
+import { contextOf } from "./contextutil";
 
 export interface ProjectExplorerBuildNode extends ProjectExplorerNodeBase, HasResourceURI {
     readonly nodeType: 'build';
@@ -24,7 +25,7 @@ export class BuildNode implements ProjectExplorerBuildNode {
         const label = `${Age.asAgo(this.age)} (${this.id})`;
         const treeItem = new TreeItem(label, TreeItemCollapsibleState.None);
         treeItem.iconPath = iconPathForStatus(this.status);
-        treeItem.contextValue = 'gettable';
+        treeItem.contextValue = contextOf('brigade.build', 'gettable', this.rerunnableContext());
         return treeItem;
     }
 
@@ -32,6 +33,12 @@ export class BuildNode implements ProjectExplorerBuildNode {
         return buildUri(this.id);
     }
 
+    private rerunnableContext(): string | undefined {
+        if (this.status === 'Pending' || this.status === 'Running') {
+            return undefined;
+        }
+        return 'rerunnable';
+    }
 }
 
 function iconPathForStatus(status: BuildStatus): Uri {

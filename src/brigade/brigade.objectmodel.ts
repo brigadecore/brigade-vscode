@@ -18,3 +18,8 @@ export interface BuildSummary {
     readonly status: BuildStatus;
     readonly age: Age;
 }
+
+export interface ProjectRunResult {
+    readonly buildId: string;
+    readonly workerId: string;
+}

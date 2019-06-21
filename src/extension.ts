@@ -5,6 +5,8 @@ import { ProjectExplorer } from './projectexplorer/projectexplorer';
 import { ProjectExplorerNode } from './projectexplorer/node';
 import { BrigadeResourceDocumentProvider } from './documents/brigaderesource.documentprovider';
 import { hasResourceURI } from './projectexplorer/node.hasresourceuri';
+import { onCommandRunProject } from './commands/runproject';
+import { onCommandRerunBuild } from './commands/rerunbuild';
 
 let currentExtensionContext: vscode.ExtensionContext | null = null;
 
@@ -16,6 +18,8 @@ export function activate(context: vscode.ExtensionContext) {
     const disposables = [
         // Commands
         vscode.commands.registerCommand("brigade.get", onCommandGet),
+        vscode.commands.registerCommand("brigade.runProject", onCommandRunProject),
+        vscode.commands.registerCommand("brigade.rerunBuild", onCommandRerunBuild),
         vscode.commands.registerCommand("brigade.refreshProjectExplorer", onCommandRefreshProjectExplorer),
 
         // Documents

@@ -3,7 +3,7 @@ import * as vscode from 'vscode';
 import * as config from '../config/config';
 import { Errorable } from '../utils/errorable';
 import * as shell from '../utils/shell';
-import { ProjectSummary, BuildSummary, BuildStatus } from './brigade.objectmodel';
+import { ProjectSummary, BuildSummary, BuildStatus, ProjectRunResult } from './brigade.objectmodel';
 import { parseTable } from './parsers';
 import { Age } from '../utils/age';
 
@@ -58,4 +58,28 @@ export function listBuilds(sh: shell.Shell, projectId: string): Promise<Errorabl
 
 export function getBuild(sh: shell.Shell, buildId: string): Promise<Errorable<string>> {
     return invokeObj(sh, 'build get', buildId, {}, (s) => s);
+}
+
+export function run(sh: shell.Shell, projectId: string): Promise<Errorable<ProjectRunResult | undefined>> {
+    function parse(stdout: string): ProjectRunResult | undefined {
+        const regexp = /Build: ([a-zA-Z0-9]+), Worker: ([-a-zA-Z0-9]+)/;
+        const match = regexp.exec(stdout);
+        if (!match || !match[1] || !match[2]) {
+            return undefined;
+        }
+        return { buildId: match[1], workerId: match[2] };
+    }
+    return invokeObj(sh, 'run', `${projectId} --no-color --no-progress -b`, {}, parse);
+}
+
+export function rerun(sh: shell.Shell, buildId: string): Promise<Errorable<ProjectRunResult | undefined>> {
+    function parse(stdout: string): ProjectRunResult | undefined {
+        const regexp = /Build: ([a-zA-Z0-9]+), Worker: ([-a-zA-Z0-9]+)/;
+        const match = regexp.exec(stdout);
+        if (!match || !match[1] || !match[2]) {
+            return undefined;
+        }
+        return { buildId: match[1], workerId: match[2] };
+    }
+    return invokeObj(sh, 'rerun', `${buildId}`, {}, parse);
 }
