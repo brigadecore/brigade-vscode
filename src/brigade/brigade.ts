@@ -60,6 +60,11 @@ export function getBuild(sh: shell.Shell, buildId: string): Promise<Errorable<st
     return invokeObj(sh, 'build get', buildId, {}, (s) => s);
 }
 
+export function getBuildLogs(sh: shell.Shell, buildId: string): Promise<Errorable<string>> {
+    const args = `${buildId} --jobs`;
+    return invokeObj(sh, 'build logs', args, {}, (s) => s);
+}
+
 export function run(sh: shell.Shell, projectId: string): Promise<Errorable<ProjectRunResult | undefined>> {
     function parse(stdout: string): ProjectRunResult | undefined {
         const regexp = /Build: ([a-zA-Z0-9]+), Worker: ([-a-zA-Z0-9]+)/;
