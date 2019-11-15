@@ -50,9 +50,11 @@ async function projectContent(projectId: string): Promise<string | null> {
 }
 
 async function buildContent(buildId: string): Promise<string | null> {
-    const json = await longRunning(`Getting build ${buildId}`, brigade.getBuild(shell, buildId));
-    if (succeeded(json)) {
-        return json.result;
+    const buildResult = await longRunning(`Getting build ${buildId}`, brigade.getBuild(shell, buildId));
+    const logsResult = await longRunning(`Getting logs for build ${buildId}`, brigade.getBuildLogs(shell, buildId));
+    if (succeeded(buildResult) && (succeeded(logsResult))) {
+        return buildResult.result + logsResult.result;
     }
+
     return null;
 }
