@@ -4,6 +4,7 @@
     "description": "Brigade - event-driven scripting for Kubernetes",
     "version": "0.0.1",
     "publisher": "ms-kubernetes-tools",
+    "icon": "images/brigade.png",
     "engines": {
         "vscode": "^1.35.0"
     },
