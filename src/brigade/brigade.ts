@@ -8,6 +8,7 @@ import { parseTable } from './parsers';
 import { Age } from '../utils/age';
 
 const logChannel = vscode.window.createOutputChannel("Brigade");
+const terminalName = "Brigade";
 
 async function invokeObj<T>(sh: shell.Shell, command: string, args: string, opts: shell.ExecOpts, fn: (stdout: string) => T): Promise<Errorable<T>> {
     const bin = config.brigPath() || 'brig';
@@ -87,4 +88,28 @@ export function rerun(sh: shell.Shell, buildId: string): Promise<Errorable<Proje
         return { buildId: match[1], workerId: match[2] };
     }
     return invokeObj(sh, 'rerun', `${buildId}`, {}, parse);
+}
+
+export async function openWebDashboard(): Promise<void> {
+    const bin = config.brigPath() || 'brig';
+    const brigadeNamespace = config.getConfiguredNamespace() || 'default';
+    const port = config.getConfiguredPort() || 8081;
+    const open = config.openDashboard();
+    const args = `--namespace ${brigadeNamespace} --port ${port} --open-dashboard=${open}`;
+    const cmd = `${bin} dashboard ${args}`;
+
+    const terminal = ensureTerminal();
+    terminal.sendText(cmd);
+    terminal.show();
+}
+
+function ensureTerminal(): vscode.Terminal {
+    const terminals = vscode.window.terminals;
+    for (const term of terminals) {
+        if (term.name === terminalName) {
+            return term;
+        }
+    }
+
+    return vscode.window.createTerminal(terminalName);
 }
