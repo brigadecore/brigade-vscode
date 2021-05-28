@@ -7,6 +7,7 @@ import { BrigadeResourceDocumentProvider } from './documents/brigaderesource.doc
 import { hasResourceURI } from './projectexplorer/node.hasresourceuri';
 import { onCommandRunProject } from './commands/runproject';
 import { onCommandRerunBuild } from './commands/rerunbuild';
+import { openWebDashboard, openCliDashboard } from './brigade/brigade';
 
 let currentExtensionContext: vscode.ExtensionContext | null = null;
 
@@ -21,6 +22,8 @@ export function activate(context: vscode.ExtensionContext) {
         vscode.commands.registerCommand("brigade.runProject", onCommandRunProject),
         vscode.commands.registerCommand("brigade.rerunBuild", onCommandRerunBuild),
         vscode.commands.registerCommand("brigade.refreshProjectExplorer", onCommandRefreshProjectExplorer),
+        vscode.commands.registerCommand("brigade.openWebDashboard", openWebDashboard),
+        vscode.commands.registerCommand("brigade.openCliDashboard", openCliDashboard),
 
         // Documents
         vscode.workspace.registerTextDocumentContentProvider(BrigadeResourceDocumentProvider.scheme(), new BrigadeResourceDocumentProvider()),
