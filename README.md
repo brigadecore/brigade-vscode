@@ -1,3 +1,7 @@
+> ⚠️&nbsp;&nbsp;This repo contains the source for a component of the Brigade
+> v1.x ecosystem. Brigade v1.x reached end-of-life on June 1, 2022 and as a
+> result, this component is no longer maintained.
+
 # brigade-vscode
 
 A Brigade extension for Visual Studio Code.
