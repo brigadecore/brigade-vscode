@@ -34,6 +34,14 @@
                         "namespace": {
                             "type": "string",
                             "description": "Namespace where Brigade is configured in your cluster"
+                        },
+                        "port": {
+                            "type": "integer",
+                            "description": "Local port for the web dashboard. Default 8081"
+                        },
+                        "open-dashboard": {
+                            "type": "boolean",
+                            "description": "Open the dashboard in the browser. Default true"
                         }
                     }
                 }
@@ -63,6 +71,11 @@
                     "light": "images/light/refresh.svg",
                     "dark": "images/dark/refresh.svg"
                 }
+            },
+            {
+                "command": "brigade.openWebDashboard",
+                "category": "Brigade",
+                "title": "Open Web Dashboard"
             }
         ],
         "viewsContainers": {
