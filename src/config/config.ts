@@ -10,10 +10,27 @@ export function brigPath(): string | undefined {
     return toolPath('brig');
 }
 
+export function brigadetermPath(): string | undefined {
+    return toolPath('brigadeterm');
+}
+
 export function toolPath(tool: string): string | undefined {
     return vscode.workspace.getConfiguration(EXTENSION_CONFIG_KEY)[`${tool}-path`];
 }
 
 export function getConfiguredNamespace(): string | undefined {
     return vscode.workspace.getConfiguration(EXTENSION_CONFIG_KEY)['namespace'];
+}
+
+export function getConfiguredPort(): number | undefined {
+    return vscode.workspace.getConfiguration(EXTENSION_CONFIG_KEY)['port'];
+}
+
+export function openDashboard(): boolean {
+    const cfg: boolean = vscode.workspace.getConfiguration(EXTENSION_CONFIG_KEY)['open-dashboard'];
+    if (cfg === undefined) {
+        return true;
+    }
+
+    return cfg;
 }
